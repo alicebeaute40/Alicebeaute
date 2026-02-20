@@ -1,0 +1,12 @@
+{
+  "name": "alice-beaute",
+  "version": "1.0.0",
+  "description": "Site vitrine Alice Beauté - Institut de beauté",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

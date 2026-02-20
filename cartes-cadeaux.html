@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartes Cadeaux — Alice Beauté</title>
+  <meta name="description" content="Offrez une carte cadeau Alice Beauté. Cartes femme et homme, de 30€ à 300€.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="loader" id="loader"><div class="loader-logo">Alice Beauté</div><div class="loader-bar"></div></div>
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Alice Beauté"></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="soins-visage.html">Soins Visage</a></li>
+        <li><a href="soins-corps.html">Soins Corps</a></li>
+        <li><a href="mains-et-pieds.html">Mains & Pieds</a></li>
+        <li><a href="epilation.html">Épilation</a></li>
+        <li><a href="cote-homme.html">Côté Homme</a></li>
+        <li><a href="cartes-cadeaux.html" class="active nav-cart">Cartes Cadeaux<span class="cart-count" id="cartCount" style="display:none;">0</span></a></li>
+      </ul>
+      <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="hero-bg" style="background-image: url('images/services-header.png');"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="section-subtitle">Offrir du Bien-Être</p>
+      <h1>Cartes Cadeaux</h1>
+      <div class="gold-line"></div>
+      <p>Les cartes cadeaux Alice Beauté invitent à une parenthèse de bien-être et de raffinement.</p>
+    </div>
+  </section>
+
+  <section class="gift-section">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">Boutique</p>
+        <h2 class="section-title reveal">Offrez un Moment d'Exception</h2>
+        <div class="gold-line reveal"></div>
+        <p class="section-desc reveal">Choisissez le montant de votre carte cadeau et faites plaisir à vos proches avec un soin chez Alice Beauté.</p>
+      </div>
+
+      <div class="gift-grid">
+        <!-- Carte Femme -->
+        <div class="gift-card reveal-left">
+          <img src="images/carte-cadeau-femme.png" alt="Carte Cadeau Femme">
+          <h3>Carte Cadeau Femme</h3>
+          <p>Une invitation au bien-être et à la beauté. Valable sur l'ensemble de nos soins.</p>
+          <div class="gift-amount-select" data-card="femme">
+            <button data-amount="30" class="selected">30 €</button>
+            <button data-amount="40">40 €</button>
+            <button data-amount="50">50 €</button>
+            <button data-amount="100">100 €</button>
+            <button data-amount="150">150 €</button>
+            <button data-amount="200">200 €</button>
+            <button data-amount="250">250 €</button>
+            <button data-amount="300">300 €</button>
+          </div>
+          <button class="btn btn-primary" onclick="addGiftCard('femme')">Ajouter au panier</button>
+        </div>
+
+        <!-- Carte Homme -->
+        <div class="gift-card reveal-right">
+          <img src="images/carte-cadeau-homme.png" alt="Carte Cadeau Homme">
+          <h3>Carte Cadeau Homme</h3>
+          <p>Le bien-être n'a pas de genre. Offrez un moment de détente et de soin.</p>
+          <div class="gift-amount-select" data-card="homme">
+            <button data-amount="30" class="selected">30 €</button>
+            <button data-amount="40">40 €</button>
+            <button data-amount="50">50 €</button>
+            <button data-amount="100">100 €</button>
+            <button data-amount="150">150 €</button>
+            <button data-amount="200">200 €</button>
+            <button data-amount="250">250 €</button>
+            <button data-amount="300">300 €</button>
+          </div>
+          <button class="btn btn-primary" onclick="addGiftCard('homme')">Ajouter au panier</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="reveal">Besoin d'Aide ?</h2>
+      <div class="gold-line reveal"></div>
+      <p class="reveal">Contactez-nous pour toute question concernant nos cartes cadeaux.</p>
+      <a href="tel:0558765160" class="btn btn-primary reveal">05 58 76 51 60</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><h4>Alice Beauté</h4><p>Un institut de beauté où l'excellence professionnelle se marie à la chaleur humaine. Soins Sothys dans un cadre élégant et apaisant.</p></div>
+        <div class="footer-links"><h4>Nos Soins</h4><a href="soins-visage.html">Soins du Visage</a><a href="soins-corps.html">Soins du Corps</a><a href="mains-et-pieds.html">Mains & Pieds</a><a href="epilation.html">Épilation</a><a href="cote-homme.html">Côté Homme</a><a href="cartes-cadeaux.html">Cartes Cadeaux</a></div>
+        <div class="footer-contact"><h4>Contact</h4><p>4 Place Verdun</p><p>40500 Saint-Sever</p><p><a href="tel:0558765160">05 58 76 51 60</a></p><p><a href="tel:0647946657">06 47 94 66 57</a></p><p><a href="mailto:alicebeaute40@gmail.com">alicebeaute40@gmail.com</a></p></div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 — 2026 Alice Beauté. Tous droits réservés.</span>
+        <div class="sothys-badge"><img src="images/sothys-logo.png" alt="Sothys"><span>Partenaire Sothys</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header"><h3>Votre Panier</h3><button class="cart-close" id="cartClose">&times;</button></div>
+    <div class="cart-items" id="cartItems"><div class="cart-empty"><p>Votre panier est vide</p></div></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;"><div class="cart-total"><span>Total</span><span id="cartTotal">0,00 €</span></div><button class="btn btn-primary" id="checkoutBtn">Passer commande</button></div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    // Gift card amount selection
+    document.querySelectorAll('.gift-amount-select').forEach(group => {
+      group.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          group.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+        });
+      });
+    });
+
+    function addGiftCard(type) {
+      const group = document.querySelector(`.gift-amount-select[data-card="${type}"]`);
+      const selected = group.querySelector('.selected');
+      if (!selected) return;
+
+      const amount = parseFloat(selected.dataset.amount);
+      const name = type === 'femme' ? 'Carte Cadeau Femme' : 'Carte Cadeau Homme';
+      const image = type === 'femme' ? 'images/carte-cadeau-femme.png' : 'images/carte-cadeau-homme.png';
+
+      Cart.add({
+        id: `carte-${type}`,
+        name: `${name} — ${amount} €`,
+        price: amount,
+        amount: amount,
+        image: image,
+        type: 'gift-card'
+      });
+    }
+  </script>
+</body>
+</html>

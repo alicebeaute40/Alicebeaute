@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Côté Homme — Alice Beauté</title>
+  <meta name="description" content="Soins homme chez Alice Beauté. Soins visage, massages, épilation et manucure pour hommes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* --- Côté Homme: Hero photo N&B immersif --- */
+    .homme-hero {
+      position: relative;
+      height: 70vh;
+      min-height: 500px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      margin-top: 0;
+    }
+    .homme-hero-img {
+      position: absolute;
+      inset: 0;
+      background: url('images/homme.jpg') center/cover no-repeat;
+      filter: grayscale(100%) brightness(0.45) contrast(1.1);
+      transform: scale(1.04);
+      transition: transform 6s ease-out, filter 1.5s ease;
+    }
+    .homme-hero:hover .homme-hero-img {
+      transform: scale(1);
+      filter: grayscale(100%) brightness(0.5) contrast(1.1);
+    }
+    .homme-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        0deg,
+        rgba(26,26,26,0.85) 0%,
+        rgba(26,26,26,0.4) 40%,
+        rgba(26,26,26,0.15) 100%
+      );
+    }
+    .homme-hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 0 clamp(20px, 4vw, 40px) 60px;
+      max-width: var(--container);
+      margin: 0 auto;
+    }
+    .homme-hero-content .section-subtitle {
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      letter-spacing: 0.4em;
+      margin-bottom: 15px;
+    }
+    .homme-hero-content h1 {
+      color: var(--white);
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      margin-bottom: 15px;
+    }
+    .homme-hero-content .gold-line {
+      margin-left: 0;
+      margin-bottom: 15px;
+      background: var(--gold-light);
+      width: 80px;
+    }
+    .homme-hero-content p {
+      color: rgba(255,255,255,0.75);
+      font-size: 1.05rem;
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    /* Photo showcase entre les sections */
+    .homme-showcase {
+      position: relative;
+      padding: 80px 0;
+      background: var(--charcoal);
+      overflow: hidden;
+    }
+    .homme-showcase::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(201,169,110,0.06) 0%, transparent 70%);
+    }
+    .homme-showcase .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .homme-showcase-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .homme-showcase-image img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.05);
+      transition: filter 0.8s ease, transform 0.8s ease;
+    }
+    .homme-showcase-image:hover img {
+      filter: grayscale(70%) contrast(1.1);
+      transform: scale(1.02);
+    }
+    .homme-showcase-image::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: -15px;
+      bottom: -15px;
+      border: 1px solid var(--gold);
+      opacity: 0.3;
+      z-index: -1;
+    }
+    .homme-showcase-text {
+      position: relative;
+      z-index: 1;
+    }
+    .homme-showcase-text .section-subtitle {
+      color: var(--gold-light);
+    }
+    .homme-showcase-text h2 {
+      color: var(--white);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: 20px;
+    }
+    .homme-showcase-text .gold-line {
+      margin-left: 0;
+      background: var(--gold-light);
+    }
+    .homme-showcase-text p {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.95rem;
+      line-height: 1.9;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 968px) {
+      .homme-showcase .container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .homme-showcase-image img {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader"><div class="loader-logo">Alice Beauté</div><div class="loader-bar"></div></div>
+
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Alice Beauté"></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="soins-visage.html">Soins Visage</a></li>
+        <li><a href="soins-corps.html">Soins Corps</a></li>
+        <li><a href="mains-et-pieds.html">Mains & Pieds</a></li>
+        <li><a href="epilation.html">Épilation</a></li>
+        <li><a href="cote-homme.html" class="active">Côté Homme</a></li>
+        <li><a href="cartes-cadeaux.html" class="nav-cart">Cartes Cadeaux<span class="cart-count" id="cartCount" style="display:none;">0</span></a></li>
+      </ul>
+      <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <!-- Hero N&B immersif pleine largeur -->
+  <section class="homme-hero">
+    <div class="homme-hero-img"></div>
+    <div class="homme-hero-overlay"></div>
+    <div class="homme-hero-content">
+      <p class="section-subtitle">Excellence & Discrétion</p>
+      <h1>Côté Homme</h1>
+      <div class="gold-line"></div>
+      <p>Le bien-être et l'excellence n'ont pas de genre. Des soins dédiés à la peau masculine, dans un cadre professionnel et confidentiel.</p>
+    </div>
+  </section>
+
+  <!-- Photo showcase N&B avec texte -->
+  <section class="homme-showcase">
+    <div class="container">
+      <div class="homme-showcase-image reveal-left">
+        <img src="images/homme.jpg" alt="Soins homme Alice Beauté">
+      </div>
+      <div class="homme-showcase-text reveal-right">
+        <p class="section-subtitle">Sothys Homme</p>
+        <h2>L'Excellence au Masculin</h2>
+        <div class="gold-line"></div>
+        <p>Parce que la peau masculine a ses propres exigences, nous avons sélectionné des soins Sothys spécifiquement formulés pour répondre à vos besoins.</p>
+        <p>Chaque prestation est réalisée avec la même rigueur et la même discrétion qui font l'identité d'Alice Beauté.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="services-detail">
+    <div class="container">
+
+      <!-- Soins Visage Homme -->
+      <div class="service-category reveal">
+        <p class="section-subtitle">Sothys Homme</p>
+        <h3>Soins du Visage</h3>
+        <div class="service-list">
+          <div class="service-item">
+            <div class="service-item-info">
+              <div class="service-item-name">Soin Visage Énergisant</div>
+              <div class="service-item-desc">Revitalise et dynamise les peaux masculines fatiguées</div>
+            </div>
+            <span class="service-item-duration">40 min</span>
+            <span class="service-item-price">50 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info">
+              <div class="service-item-name">Soin Regard Défatigant & Lissant</div>
+              <div class="service-item-desc">Réduit les signes de fatigue autour des yeux</div>
+            </div>
+            <span class="service-item-duration">30 min</span>
+            <span class="service-item-price">40 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info">
+              <div class="service-item-name">Soin Regard — En complément</div>
+              <div class="service-item-desc">Tarif préférentiel associé à un autre soin</div>
+            </div>
+            <span class="service-item-duration">30 min</span>
+            <span class="service-item-price">22 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soins Corps Homme -->
+      <div class="service-category reveal">
+        <p class="section-subtitle">Sothys Homme</p>
+        <h3>Soins du Corps</h3>
+        <div class="service-list">
+          <div class="service-item">
+            <div class="service-item-info">
+              <div class="service-item-name">Massage Relaxant</div>
+              <div class="service-item-desc">Détente musculaire ciblée</div>
+            </div>
+            <span class="service-item-duration">20 min</span>
+            <span class="service-item-price">30 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info">
+              <div class="service-item-name">Massage Relaxant</div>
+              <div class="service-item-desc">Massage complet du corps pour une détente profonde</div>
+            </div>
+            <span class="service-item-duration">45 min</span>
+            <span class="service-item-price">65 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info">
+              <div class="service-item-name">Soin du Dos</div>
+              <div class="service-item-desc">Gommage et massage du dos</div>
+            </div>
+            <span class="service-item-duration">20 min</span>
+            <span class="service-item-price">27 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Épilation Homme -->
+      <div class="service-category reveal">
+        <p class="section-subtitle">Homme</p>
+        <h3>Épilation</h3>
+        <div class="service-list">
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Sourcils</div></div>
+            <span class="service-item-price">10 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Jambes</div></div>
+            <span class="service-item-price">28 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Aisselles</div></div>
+            <span class="service-item-price">10 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Dos</div></div>
+            <span class="service-item-price">25 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Torse</div></div>
+            <span class="service-item-price">30 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mains/Pieds Homme -->
+      <div class="service-category reveal">
+        <p class="section-subtitle">Homme</p>
+        <h3>Mains & Pieds</h3>
+        <div class="service-list">
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Manucure</div></div>
+            <span class="service-item-price">20 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Gommage Nourrissant</div></div>
+            <span class="service-item-price">18 €</span>
+          </div>
+          <div class="service-item">
+            <div class="service-item-info"><div class="service-item-name">Beauté des Pieds</div></div>
+            <span class="service-item-price">20 €</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="reveal">Prenez Rendez-Vous</h2>
+      <div class="gold-line reveal"></div>
+      <p class="reveal">Messieurs, prenez soin de vous. Contactez-nous pour réserver.</p>
+      <a href="tel:0558765160" class="btn btn-primary reveal">05 58 76 51 60</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><h4>Alice Beauté</h4><p>Un institut de beauté où l'excellence professionnelle se marie à la chaleur humaine. Soins Sothys dans un cadre élégant et apaisant.</p></div>
+        <div class="footer-links"><h4>Nos Soins</h4><a href="soins-visage.html">Soins du Visage</a><a href="soins-corps.html">Soins du Corps</a><a href="mains-et-pieds.html">Mains & Pieds</a><a href="epilation.html">Épilation</a><a href="cote-homme.html">Côté Homme</a><a href="cartes-cadeaux.html">Cartes Cadeaux</a></div>
+        <div class="footer-contact"><h4>Contact</h4><p>4 Place Verdun</p><p>40500 Saint-Sever</p><p><a href="tel:0558765160">05 58 76 51 60</a></p><p><a href="tel:0647946657">06 47 94 66 57</a></p><p><a href="mailto:alicebeaute40@gmail.com">alicebeaute40@gmail.com</a></p></div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 — 2026 Alice Beauté. Tous droits réservés.</span>
+        <div class="sothys-badge"><img src="images/sothys-logo.png" alt="Sothys"><span>Partenaire Sothys</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header"><h3>Votre Panier</h3><button class="cart-close" id="cartClose">&times;</button></div>
+    <div class="cart-items" id="cartItems"><div class="cart-empty"><p>Votre panier est vide</p></div></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;"><div class="cart-total"><span>Total</span><span id="cartTotal">0,00 €</span></div><button class="btn btn-primary" id="checkoutBtn">Passer commande</button></div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paiement — Alice Beauté</title>
+  <meta name="description" content="Finalisez votre commande Alice Beauté de manière sécurisée.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .checkout-page {
+      padding-top: 120px;
+      padding-bottom: var(--section-pad);
+      min-height: 80vh;
+    }
+
+    .checkout-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    /* Progress steps */
+    .checkout-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 50px;
+    }
+
+    .checkout-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      position: relative;
+    }
+
+    .checkout-step.active {
+      color: var(--gold);
+    }
+
+    .checkout-step.done {
+      color: var(--charcoal);
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .checkout-step.active .step-number {
+      background: var(--gold);
+      color: var(--white);
+      border-color: var(--gold);
+    }
+
+    .checkout-step.done .step-number {
+      background: var(--charcoal);
+      color: var(--white);
+      border-color: var(--charcoal);
+    }
+
+    .step-connector {
+      width: 60px;
+      height: 1px;
+      background: rgba(201,169,110,0.25);
+      margin: 0 15px;
+    }
+
+    .step-connector.done {
+      background: var(--charcoal);
+    }
+
+    /* Layout */
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 50px;
+      align-items: start;
+    }
+
+    /* Form */
+    .checkout-form {
+      background: var(--white);
+      padding: 40px;
+      border: 1px solid rgba(201,169,110,0.15);
+    }
+
+    .checkout-form h3 {
+      font-size: 1.4rem;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(201,169,110,0.15);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    .form-group label .required {
+      color: var(--gold);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 16px;
+      border: 1px solid rgba(201,169,110,0.25);
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+    }
+
+    .form-group input::placeholder {
+      color: var(--text-light);
+      font-weight: 300;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-divider {
+      border: none;
+      border-top: 1px solid rgba(201,169,110,0.15);
+      margin: 30px 0;
+    }
+
+    /* Card input styling */
+    .card-icons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .card-icons span {
+      padding: 4px 10px;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--text-light);
+    }
+
+    #stripeCardElement {
+      padding: 14px 16px;
+      border: 1px solid rgba(201,169,110,0.25);
+      background: var(--cream);
+      transition: border-color 0.3s;
+      min-height: 44px;
+    }
+
+    #stripeCardElement.focused {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+    }
+
+    .card-errors {
+      color: #c0392b;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      min-height: 20px;
+    }
+
+    /* Order summary sidebar */
+    .order-summary {
+      background: var(--white);
+      border: 1px solid rgba(201,169,110,0.15);
+      padding: 35px;
+      position: sticky;
+      top: 100px;
+    }
+
+    .order-summary h3 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(201,169,110,0.15);
+    }
+
+    .order-item {
+      display: flex;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .order-item img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      background: var(--cream);
+      border-radius: 3px;
+      padding: 5px;
+    }
+
+    .order-item-info {
+      flex: 1;
+    }
+
+    .order-item-info h4 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      color: var(--charcoal);
+      margin-bottom: 3px;
+    }
+
+    .order-item-info span {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .order-item-price {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      color: var(--charcoal);
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .order-totals {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(201,169,110,0.2);
+    }
+
+    .order-totals-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.9rem;
+    }
+
+    .order-totals-row.grand-total {
+      border-top: 1px solid rgba(201,169,110,0.2);
+      margin-top: 10px;
+      padding-top: 15px;
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: var(--charcoal);
+    }
+
+    .order-totals-row.grand-total .total-amount {
+      color: var(--gold);
+      font-size: 1.6rem;
+    }
+
+    .order-edit-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-decoration: underline;
+    }
+
+    .order-edit-link:hover {
+      color: var(--gold);
+    }
+
+    /* Submit button */
+    .checkout-submit {
+      margin-top: 30px;
+    }
+
+    .checkout-submit .btn {
+      width: 100%;
+      text-align: center;
+      padding: 18px 40px;
+      font-size: 0.8rem;
+    }
+
+    .checkout-submit .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      letter-spacing: 0.1em;
+    }
+
+    .checkout-submit .secure-note svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Success message */
+    .checkout-success {
+      text-align: center;
+      padding: 80px 20px;
+      display: none;
+    }
+
+    .checkout-success svg {
+      width: 80px;
+      height: 80px;
+      color: var(--gold);
+      margin-bottom: 25px;
+    }
+
+    .checkout-success h2 {
+      margin-bottom: 15px;
+    }
+
+    .checkout-success p {
+      color: var(--text-light);
+      max-width: 500px;
+      margin: 0 auto 10px;
+    }
+
+    .checkout-success .btn {
+      margin-top: 25px;
+    }
+
+    @media (max-width: 968px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+      }
+      .order-summary {
+        position: static;
+        order: -1;
+      }
+      .checkout-steps {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .step-connector {
+        width: 30px;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader"><div class="loader-logo">Alice Beauté</div><div class="loader-bar"></div></div>
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Alice Beauté"></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="soins-visage.html">Soins Visage</a></li>
+        <li><a href="soins-corps.html">Soins Corps</a></li>
+        <li><a href="mains-et-pieds.html">Mains & Pieds</a></li>
+        <li><a href="epilation.html">Épilation</a></li>
+        <li><a href="cote-homme.html">Côté Homme</a></li>
+        <li><a href="cartes-cadeaux.html" class="nav-cart">Cartes Cadeaux<span class="cart-count" id="cartCount" style="display:none;">0</span></a></li>
+      </ul>
+      <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <section class="checkout-page">
+    <div class="container">
+
+      <div class="checkout-header reveal">
+        <p class="section-subtitle">Finaliser la commande</p>
+        <h1 class="section-title">Paiement</h1>
+        <div class="gold-line"></div>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="checkout-steps reveal">
+        <div class="checkout-step done">
+          <span class="step-number">1</span>
+          <span>Panier</span>
+        </div>
+        <div class="step-connector done"></div>
+        <div class="checkout-step active">
+          <span class="step-number">2</span>
+          <span>Informations</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="checkout-step">
+          <span class="step-number">3</span>
+          <span>Confirmation</span>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div class="checkout-layout" id="checkoutContent">
+
+        <!-- Form -->
+        <div class="checkout-form reveal">
+          <h3>Vos Informations</h3>
+          <form id="paymentForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Prénom <span class="required">*</span></label>
+                <input type="text" id="firstName" placeholder="Votre prénom" required>
+              </div>
+              <div class="form-group">
+                <label>Nom <span class="required">*</span></label>
+                <input type="text" id="lastName" placeholder="Votre nom" required>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Email <span class="required">*</span></label>
+                <input type="email" id="email" placeholder="votre@email.com" required>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Téléphone</label>
+                <input type="tel" id="phone" placeholder="06 00 00 00 00">
+              </div>
+            </div>
+
+            <hr class="form-divider">
+
+            <h3>Informations de Livraison</h3>
+            <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 20px;">
+              La carte cadeau sera envoyée par email à l'adresse indiquée ci-dessus.
+            </p>
+            <div class="form-row full">
+              <div class="form-group">
+                <label>Message personnalisé (optionnel)</label>
+                <textarea id="giftMessage" placeholder="Ajoutez un message personnel pour accompagner votre carte cadeau..."></textarea>
+              </div>
+            </div>
+
+            <hr class="form-divider">
+
+            <h3>Paiement</h3>
+            <div class="card-icons">
+              <span>VISA</span>
+              <span>Mastercard</span>
+              <span>CB</span>
+            </div>
+
+            <!-- Stripe Elements placeholder -->
+            <div class="form-group">
+              <label>Carte bancaire <span class="required">*</span></label>
+              <div id="stripeCardElement">
+                <!-- When Stripe is configured, Stripe Elements will mount here -->
+                <!-- Fallback display for demo -->
+              </div>
+              <div class="card-errors" id="cardErrors"></div>
+            </div>
+
+            <div class="checkout-submit">
+              <button type="submit" class="btn btn-primary" id="submitPayment">
+                Payer <span id="payBtnAmount"></span>
+              </button>
+              <div class="secure-note">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                Paiement sécurisé via Stripe — Vos données sont chiffrées
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary reveal">
+          <h3>Votre Commande</h3>
+          <div id="orderItems"></div>
+          <div class="order-totals">
+            <div class="order-totals-row">
+              <span>Sous-total</span>
+              <span id="orderSubtotal">0,00 €</span>
+            </div>
+            <div class="order-totals-row">
+              <span>Livraison</span>
+              <span style="color: var(--gold);">Gratuite</span>
+            </div>
+            <div class="order-totals-row grand-total">
+              <span>Total</span>
+              <span class="total-amount" id="orderTotal">0,00 €</span>
+            </div>
+          </div>
+          <a href="panier.html" class="order-edit-link">Modifier le panier</a>
+        </div>
+      </div>
+
+      <!-- Success state -->
+      <div class="checkout-success" id="checkoutSuccess">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h2>Merci pour votre commande !</h2>
+        <p>Votre carte cadeau a bien été enregistrée. Vous recevrez un email de confirmation avec votre carte cadeau dans les prochaines minutes.</p>
+        <p style="font-size: 0.85rem; color: var(--gold); margin-top: 15px;">Un doute ? Contactez-nous au 05 58 76 51 60</p>
+        <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><h4>Alice Beauté</h4><p>Un institut de beauté où l'excellence professionnelle se marie à la chaleur humaine. Soins Sothys dans un cadre élégant et apaisant.</p></div>
+        <div class="footer-links"><h4>Nos Soins</h4><a href="soins-visage.html">Soins du Visage</a><a href="soins-corps.html">Soins du Corps</a><a href="mains-et-pieds.html">Mains & Pieds</a><a href="epilation.html">Épilation</a><a href="cote-homme.html">Côté Homme</a><a href="cartes-cadeaux.html">Cartes Cadeaux</a></div>
+        <div class="footer-contact"><h4>Contact</h4><p>4 Place Verdun</p><p>40500 Saint-Sever</p><p><a href="tel:0558765160">05 58 76 51 60</a></p><p><a href="tel:0647946657">06 47 94 66 57</a></p><p><a href="mailto:alicebeaute40@gmail.com">alicebeaute40@gmail.com</a></p></div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 — 2026 Alice Beauté. Tous droits réservés.</span>
+        <div class="sothys-badge"><img src="images/sothys-logo.png" alt="Sothys"><span>Partenaire Sothys</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header"><h3>Votre Panier</h3><button class="cart-close" id="cartClose">&times;</button></div>
+    <div class="cart-items" id="cartItems"><div class="cart-empty"><p>Votre panier est vide</p></div></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;"><div class="cart-total"><span>Total</span><span id="cartTotal">0,00 €</span></div><button class="btn btn-primary" id="checkoutBtn">Passer commande</button></div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = Cart.items;
+
+      // If cart is empty, redirect to cart page
+      if (items.length === 0) {
+        window.location.href = 'panier.html';
+        return;
+      }
+
+      // Render order summary
+      const orderItemsEl = document.getElementById('orderItems');
+      const orderSubtotalEl = document.getElementById('orderSubtotal');
+      const orderTotalEl = document.getElementById('orderTotal');
+      const payBtnAmount = document.getElementById('payBtnAmount');
+
+      orderItemsEl.innerHTML = items.map(item => `
+        <div class="order-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="order-item-info">
+            <h4>${item.name}</h4>
+            <span>Qté : ${item.qty || 1}</span>
+          </div>
+          <span class="order-item-price">${(item.amount * (item.qty || 1)).toFixed(2)} €</span>
+        </div>
+      `).join('');
+
+      const total = Cart.getTotal();
+      orderSubtotalEl.textContent = total.toFixed(2) + ' €';
+      orderTotalEl.textContent = total.toFixed(2) + ' €';
+      payBtnAmount.textContent = total.toFixed(2) + ' €';
+
+      // --- Stripe Integration ---
+      const STRIPE_PK = 'pk_test_VOTRE_CLE_STRIPE_ICI';
+      const stripeConfigured = !STRIPE_PK.includes('VOTRE_CLE');
+
+      if (stripeConfigured) {
+        // Load Stripe.js and mount Elements
+        const script = document.createElement('script');
+        script.src = 'https://js.stripe.com/v3/';
+        script.onload = () => {
+          const stripe = Stripe(STRIPE_PK);
+          const elements = stripe.elements({
+            fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500' }]
+          });
+          const card = elements.create('card', {
+            style: {
+              base: {
+                fontFamily: '"Montserrat", sans-serif',
+                fontSize: '15px',
+                color: '#3a3a3a',
+                '::placeholder': { color: '#7a7a7a' }
+              }
+            }
+          });
+          card.mount('#stripeCardElement');
+
+          card.on('focus', () => document.getElementById('stripeCardElement').classList.add('focused'));
+          card.on('blur', () => document.getElementById('stripeCardElement').classList.remove('focused'));
+          card.on('change', (event) => {
+            document.getElementById('cardErrors').textContent = event.error ? event.error.message : '';
+          });
+
+          // Handle form submission with Stripe
+          document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitPayment');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Traitement en cours...';
+
+            try {
+              const response = await fetch('/create-checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  items: items.map(item => ({
+                    name: item.name,
+                    amount: Math.round(item.amount * 100),
+                    qty: item.qty || 1
+                  })),
+                  customer: {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    message: document.getElementById('giftMessage').value
+                  }
+                })
+              });
+
+              const session = await response.json();
+              if (session.url) {
+                localStorage.removeItem('aliceBeauteCart');
+                window.location.href = session.url;
+              }
+            } catch (err) {
+              document.getElementById('cardErrors').textContent = 'Erreur de connexion au serveur de paiement.';
+              submitBtn.disabled = false;
+              submitBtn.textContent = `Payer ${total.toFixed(2)} €`;
+            }
+          });
+        };
+        document.head.appendChild(script);
+      } else {
+        // Demo mode: simulated card input
+        document.getElementById('stripeCardElement').innerHTML = `
+          <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:12px;">
+            <input type="text" placeholder="4242 4242 4242 4242" style="border:none; background:transparent; font-family:var(--font-body); font-size:0.9rem; color:var(--charcoal); outline:none; width:100%;" id="demoCardNumber">
+            <input type="text" placeholder="MM / AA" style="border:none; background:transparent; font-family:var(--font-body); font-size:0.9rem; color:var(--charcoal); outline:none; width:100%;" id="demoCardExpiry">
+            <input type="text" placeholder="CVC" style="border:none; background:transparent; font-family:var(--font-body); font-size:0.9rem; color:var(--charcoal); outline:none; width:100%;" id="demoCardCvc">
+          </div>
+        `;
+
+        // Focus effect for demo
+        document.getElementById('stripeCardElement').addEventListener('focusin', () => {
+          document.getElementById('stripeCardElement').classList.add('focused');
+        });
+        document.getElementById('stripeCardElement').addEventListener('focusout', () => {
+          document.getElementById('stripeCardElement').classList.remove('focused');
+        });
+
+        // Demo form submission
+        document.getElementById('paymentForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          // Validate required fields
+          const firstName = document.getElementById('firstName').value.trim();
+          const lastName = document.getElementById('lastName').value.trim();
+          const email = document.getElementById('email').value.trim();
+
+          if (!firstName || !lastName || !email) {
+            document.getElementById('cardErrors').textContent = 'Veuillez remplir tous les champs obligatoires.';
+            return;
+          }
+
+          const submitBtn = document.getElementById('submitPayment');
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Traitement en cours...';
+
+          // Simulate payment processing
+          setTimeout(() => {
+            // Show success
+            document.getElementById('checkoutContent').style.display = 'none';
+            document.querySelector('.checkout-steps').style.display = 'none';
+            document.getElementById('checkoutSuccess').style.display = 'block';
+
+            // Update step 3 as active
+            localStorage.removeItem('aliceBeauteCart');
+            Cart.items = [];
+            Cart.updateUI();
+          }, 2000);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
