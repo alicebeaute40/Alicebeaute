@@ -397,8 +397,14 @@ app.get('*', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  const mode = MOLLIE_API_KEY?.startsWith('live_') ? 'LIVE 🔴' : 'TEST 🟡';
-  console.log(`\n  ✨ Alice Beauté running at http://localhost:${PORT}\n`);
-  console.log(`  ✅ Mollie configuré — mode ${mode}\n`);
-});
+// En local : démarrage du serveur classique
+// Sur Vercel : on exporte l'app (serverless)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    const mode = MOLLIE_API_KEY?.startsWith('live_') ? 'LIVE 🔴' : 'TEST 🟡';
+    console.log(`\n  ✨ Alice Beauté running at http://localhost:${PORT}\n`);
+    console.log(`  ✅ Mollie configuré — mode ${mode}\n`);
+  });
+}
+
+module.exports = app;
