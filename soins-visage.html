@@ -173,7 +173,7 @@
               <li>4 soins regard</li>
             </ul>
             <div class="package-price">399 € <span>au lieu de 484 €</span></div>
-            <a href="tel:0558765160" class="btn btn-outline">Réserver</a>
+            <a href="#phone-cta" class="btn btn-outline btn-reserver">Réserver</a>
           </div>
           <div class="package-card reveal-scale delay-2">
             <h4>Forfait Excellence</h4>
@@ -183,7 +183,7 @@
               <li>1 soin regard</li>
             </ul>
             <div class="package-price">299 € <span>au lieu de 350 €</span></div>
-            <a href="tel:0558765160" class="btn btn-outline">Réserver</a>
+            <a href="#phone-cta" class="btn btn-outline btn-reserver">Réserver</a>
           </div>
           <div class="package-card reveal-scale delay-3">
             <h4>Forfait Saison</h4>
@@ -191,7 +191,7 @@
               <li>4 soins gourmandise de saison</li>
             </ul>
             <div class="package-price">199 € <span>au lieu de 220 €</span></div>
-            <a href="tel:0558765160" class="btn btn-outline">Réserver</a>
+            <a href="#phone-cta" class="btn btn-outline btn-reserver">Réserver</a>
           </div>
         </div>
       </div>
@@ -205,7 +205,7 @@
       <h2 class="reveal">Prenez Rendez-Vous</h2>
       <div class="gold-line reveal"></div>
       <p class="reveal">Contactez-nous par téléphone ou SMS pour réserver votre soin du visage.</p>
-      <a href="tel:0558765160" class="btn btn-primary reveal">05 58 76 51 60</a>
+      <a href="tel:0558765160" class="btn btn-primary reveal" id="phone-cta">05 58 76 51 60</a>
     </div>
   </section>
 
@@ -259,5 +259,29 @@
 
   <script src="js/main.js"></script>
   <script src="js/cart.js"></script>
+  <script>
+    document.querySelectorAll('.btn-reserver').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var phone = document.getElementById('phone-cta');
+        phone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function() {
+          phone.classList.add('phone-highlight');
+          setTimeout(function() { phone.classList.remove('phone-highlight'); }, 1800);
+        }, 600);
+      });
+    });
+  </script>
+  <style>
+    @keyframes phonePulse {
+      0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(180,140,80,0.6); }
+      40%  { transform: scale(1.08); box-shadow: 0 0 0 12px rgba(180,140,80,0); }
+      70%  { transform: scale(1.04); }
+      100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(180,140,80,0); }
+    }
+    .phone-highlight {
+      animation: phonePulse 0.6s ease 0s 3;
+    }
+  </style>
 </body>
 </html>

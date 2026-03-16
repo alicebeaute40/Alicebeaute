@@ -993,6 +993,50 @@ p {
   text-align: center;
 }
 
+.cart-email-group {
+  margin-bottom: 14px;
+}
+
+.cart-email-group label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.cart-email-group label span {
+  text-transform: none;
+  font-style: italic;
+  letter-spacing: 0;
+  color: #888;
+}
+
+.cart-email-group input[type="email"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  color: #333;
+  background: #fafafa;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.cart-email-group input[type="email"]:focus {
+  border-color: var(--color-gold, #c9a96e);
+  background: #fff;
+}
+
+.cart-email-group input[type="email"].input-error {
+  border-color: #c0392b;
+  background: #fff5f5;
+}
+
 /* ---------- Animations (reveal on scroll) ---------- */
 .reveal {
   opacity: 0;

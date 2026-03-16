@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merci — Alice Beauté</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #faf9f7;
+      margin: 0;
+    }
+
+    .merci-card {
+      text-align: center;
+      max-width: 560px;
+      padding: 60px 48px;
+      background: #fff;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.07);
+    }
+
+    .merci-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #f5f0e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+    }
+
+    .merci-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #c9a96e;
+    }
+
+    .merci-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 8px;
+    }
+
+    .merci-card h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: #2c2c2c;
+      margin: 0 0 16px;
+      line-height: 1.2;
+    }
+
+    .gold-line {
+      width: 48px;
+      height: 1px;
+      background: #c9a96e;
+      margin: 0 auto 24px;
+    }
+
+    .merci-card p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: #666;
+      line-height: 1.8;
+      margin: 0 0 12px;
+    }
+
+    .merci-card p strong {
+      color: #333;
+      font-weight: 500;
+    }
+
+    .countdown-block {
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .countdown-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: #999;
+      margin-bottom: 12px !important;
+    }
+
+    .countdown-bar-wrap {
+      width: 100%;
+      height: 2px;
+      background: #ece8e0;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .countdown-bar {
+      height: 100%;
+      width: 100%;
+      background: #c9a96e;
+      transform-origin: left;
+      animation: shrink 10s linear forwards;
+    }
+
+    @keyframes shrink {
+      from { transform: scaleX(1); }
+      to   { transform: scaleX(0); }
+    }
+
+    .btn-home {
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      background: #2c2c2c;
+      padding: 14px 32px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-home:hover {
+      background: #c9a96e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="merci-card">
+    <div class="merci-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+
+    <div class="merci-logo">Alice Beauté</div>
+    <h1>Merci pour votre achat</h1>
+    <div class="gold-line"></div>
+
+    <p>Votre paiement a bien été reçu.</p>
+    <p>
+      Votre <strong>carte cadeau</strong> vous sera envoyée par email dans quelques instants.<br>
+      Pensez à vérifier vos courriers indésirables si vous ne la recevez pas sous 5 minutes.
+    </p>
+
+    <div class="countdown-block">
+      <p class="countdown-text">Redirection vers l'accueil dans <span id="countdown">10</span> secondes…</p>
+      <div class="countdown-bar-wrap">
+        <div class="countdown-bar"></div>
+      </div>
+      <a href="index.html" class="btn-home">Retour à l'accueil</a>
+    </div>
+  </div>
+
+  <script>
+    // Vérifier le paiement et déclencher l'envoi de la carte cadeau
+    (async () => {
+      const paymentId = sessionStorage.getItem('pendingPaymentId');
+      if (paymentId) {
+        sessionStorage.removeItem('pendingPaymentId');
+        try {
+          await fetch(`/verify-payment?id=${encodeURIComponent(paymentId)}`);
+        } catch (e) {
+          console.warn('Erreur vérification paiement :', e);
+        }
+      }
+    })();
+
+    // Compte à rebours → accueil
+    let seconds = 10;
+    const el = document.getElementById('countdown');
+    const timer = setInterval(() => {
+      seconds--;
+      if (el) el.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(timer);
+        window.location.href = 'index.html';
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>

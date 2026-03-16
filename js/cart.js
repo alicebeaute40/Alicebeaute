@@ -1,5 +1,5 @@
 /* ============================================
-   ALICE BEAUTÉ — Cart & Stripe Integration
+   ALICE BEAUTÉ — Cart & Mollie Integration
    ============================================ */
 
 const Cart = {
@@ -62,7 +62,20 @@ const Cart = {
       return;
     }
 
-    if (cartFooterEl) cartFooterEl.style.display = 'block';
+    if (cartFooterEl) {
+      cartFooterEl.style.display = 'block';
+      // Inject email input once
+      if (!document.getElementById('buyerEmail')) {
+        const emailDiv = document.createElement('div');
+        emailDiv.className = 'cart-email-group';
+        emailDiv.innerHTML = `
+          <label for="buyerEmail">Votre email <span>(pour recevoir votre carte cadeau)</span></label>
+          <input type="email" id="buyerEmail" placeholder="votre@email.fr" autocomplete="email">
+        `;
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (checkoutBtn) cartFooterEl.insertBefore(emailDiv, checkoutBtn);
+      }
+    }
 
     cartItemsEl.innerHTML = this.items.map((item, i) => `
       <div class="cart-item">
@@ -95,44 +108,46 @@ const Cart = {
   },
 
   async checkout() {
-    // STRIPE INTEGRATION
-    // Replace with your Stripe publishable key
-    const STRIPE_PK = 'pk_test_VOTRE_CLE_STRIPE_ICI';
+    const emailInput = document.getElementById('buyerEmail');
+    const buyerEmail = emailInput ? emailInput.value.trim() : '';
 
-    if (STRIPE_PK === 'pk_test_VOTRE_CLE_STRIPE_ICI') {
-      alert(
-        'Stripe n\'est pas encore configuré.\n\n' +
-        'Pour activer le paiement :\n' +
-        '1. Créez un compte sur stripe.com\n' +
-        '2. Récupérez votre clé publique (pk_test_...)\n' +
-        '3. Remplacez STRIPE_PK dans js/cart.js\n' +
-        '4. Configurez le endpoint /create-checkout-session dans server.js'
-      );
+    if (!buyerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) {
+      if (emailInput) {
+        emailInput.focus();
+        emailInput.classList.add('input-error');
+        setTimeout(() => emailInput.classList.remove('input-error'), 2000);
+      }
+      alert('Veuillez entrer votre adresse email pour recevoir votre carte cadeau.');
       return;
     }
 
     try {
-      const response = await fetch('/create-checkout-session', {
+      const response = await fetch('/create-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          buyerEmail,
           items: this.items.map(item => ({
+            id: item.id,
             name: item.name,
-            amount: Math.round(item.amount * 100), // Stripe uses cents
+            amount: item.amount,
             qty: item.qty || 1,
-            image: item.image
+            image: item.image,
+            type: item.type || ''
           }))
         })
       });
 
-      const session = await response.json();
+      const data = await response.json();
 
-      if (session.url) {
-        // Clear cart and redirect to Stripe
+      if (data.url) {
+        // Stocker l'ID de paiement pour vérification au retour
+        if (data.paymentId) sessionStorage.setItem('pendingPaymentId', data.paymentId);
+        // Vider le panier et rediriger vers Mollie
         localStorage.removeItem('aliceBeauteCart');
-        window.location.href = session.url;
+        window.location.href = data.url;
       } else {
-        alert('Erreur lors de la création de la session de paiement.');
+        alert('Erreur lors de la création du paiement.');
       }
     } catch (err) {
       console.error('Checkout error:', err);
