@@ -561,6 +561,9 @@
   <script src="js/main.js"></script>
   <script src="js/cart.js"></script>
   <script>
+    // Les cartes cadeaux sont disponibles uniquement à l'institut — achat en ligne désactivé
+    window.location.replace('cartes-cadeaux.html');
+
     document.addEventListener('DOMContentLoaded', () => {
       const items = Cart.items;
 

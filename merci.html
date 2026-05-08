@@ -151,10 +151,10 @@
     <h1>Merci pour votre achat</h1>
     <div class="gold-line"></div>
 
-    <p>Votre paiement a bien été reçu.</p>
+    <p>Nos cartes cadeaux sont disponibles directement à l'institut.</p>
     <p>
-      Votre <strong>carte cadeau</strong> vous sera envoyée par email dans quelques instants.<br>
-      Pensez à vérifier vos courriers indésirables si vous ne la recevez pas sous 5 minutes.
+      Nous serons ravies de vous accueillir sur place<br>
+      pour vous conseiller et préparer une attention personnalisée.
     </p>
 
     <div class="countdown-block">
@@ -167,18 +167,8 @@
   </div>
 
   <script>
-    // Vérifier le paiement et déclencher l'envoi de la carte cadeau
-    (async () => {
-      const paymentId = sessionStorage.getItem('pendingPaymentId');
-      if (paymentId) {
-        sessionStorage.removeItem('pendingPaymentId');
-        try {
-          await fetch(`/verify-payment?id=${encodeURIComponent(paymentId)}`);
-        } catch (e) {
-          console.warn('Erreur vérification paiement :', e);
-        }
-      }
-    })();
+    // Redirection vers l'accueil — achat en ligne désactivé
+    window.location.replace('index.html');
 
     // Compte à rebours → accueil
     let seconds = 10;

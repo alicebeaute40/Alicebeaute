@@ -213,39 +213,9 @@ async function sendGiftCardEmail(buyerEmail, items) {
 // ROUTES
 // ============================================
 
-// Créer un paiement Mollie
-app.post('/create-payment', async (req, res) => {
-  try {
-    const { items, buyerEmail } = req.body;
-
-    const total = items.reduce((sum, item) => sum + (item.amount * (item.qty || 1)), 0);
-    const description = items.map(i => `${i.name}${i.qty > 1 ? ' ×' + i.qty : ''}`).join(', ');
-
-    const paymentData = {
-      amount: {
-        currency: 'EUR',
-        value: total.toFixed(2)
-      },
-      description: `Alice Beauté — ${description}`,
-      redirectUrl: `${REDIRECT_URL}/merci.html`,
-      metadata: {
-        items: JSON.stringify(items),
-        buyerEmail: buyerEmail || '',
-      }
-    };
-
-    if (!BASE_URL.includes('localhost')) {
-      paymentData.webhookUrl = `${BASE_URL}/payment-webhook`;
-    }
-
-    const payment = await mollie.payments.create(paymentData);
-
-    res.json({ url: payment.getCheckoutUrl(), paymentId: payment.id });
-
-  } catch (err) {
-    console.error('Mollie error:', err.message);
-    res.status(500).json({ error: err.message });
-  }
+// Création de paiement désactivée — cartes cadeaux disponibles uniquement à l'institut
+app.post('/create-payment', (req, res) => {
+  res.status(410).json({ error: 'La vente en ligne des cartes cadeaux n\'est plus disponible. Rendez-vous directement à l\'institut Alice Beauté.' });
 });
 
 // Webhook Mollie (confirmation de paiement)

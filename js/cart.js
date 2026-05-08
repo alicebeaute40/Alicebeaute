@@ -108,51 +108,8 @@ const Cart = {
   },
 
   async checkout() {
-    const emailInput = document.getElementById('buyerEmail');
-    const buyerEmail = emailInput ? emailInput.value.trim() : '';
-
-    if (!buyerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) {
-      if (emailInput) {
-        emailInput.focus();
-        emailInput.classList.add('input-error');
-        setTimeout(() => emailInput.classList.remove('input-error'), 2000);
-      }
-      alert('Veuillez entrer votre adresse email pour recevoir votre carte cadeau.');
-      return;
-    }
-
-    try {
-      const response = await fetch('/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          buyerEmail,
-          items: this.items.map(item => ({
-            id: item.id,
-            name: item.name,
-            amount: item.amount,
-            qty: item.qty || 1,
-            image: item.image,
-            type: item.type || ''
-          }))
-        })
-      });
-
-      const data = await response.json();
-
-      if (data.url) {
-        // Stocker l'ID de paiement pour vérification au retour
-        if (data.paymentId) sessionStorage.setItem('pendingPaymentId', data.paymentId);
-        // Vider le panier et rediriger vers Mollie
-        localStorage.removeItem('aliceBeauteCart');
-        window.location.href = data.url;
-      } else {
-        alert('Erreur lors de la création du paiement.');
-      }
-    } catch (err) {
-      console.error('Checkout error:', err);
-      alert('Erreur de connexion au serveur de paiement.');
-    }
+    // Vente en ligne désactivée — cartes cadeaux disponibles uniquement à l'institut
+    return;
   }
 };
 
